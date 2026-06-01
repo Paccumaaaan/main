@@ -582,6 +582,68 @@ startAngle
 
 drawRoulette();
 
+let stoneClicks = 0;
+
+function updateStonePanel(){
+
+const panel =
+document.getElementById(
+"stonePanel"
+);
+
+if(medals <= 0){
+
+panel.style.display =
+"block";
+
+}else{
+
+panel.style.display =
+"none";
+
+}
+
+}
+
+function mineStone(){
+
+stoneClicks++;
+
+document
+.getElementById(
+"stoneCount"
+)
+.innerHTML =
+
+stoneClicks +
+" / 100";
+
+if(stoneClicks >= 100){
+
+stoneClicks = 0;
+
+medals++;
+
+saveData();
+
+document
+.getElementById(
+"stoneCount"
+)
+.innerHTML =
+
+"0 / 100";
+
+showMessage(
+"🪨 メダル1枚獲得！"
+);
+
+}
+
+updateStonePanel();
+}
+
+    
 if(progress < 1){
 
 requestAnimationFrame(
