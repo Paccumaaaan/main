@@ -87,9 +87,17 @@ function update(){
  if(ball.x<ball.r||ball.x>c.width-ball.r) ball.dx*=-1;
  if(ball.y<ball.r) ball.dy*=-1;
 
-if(ball.y+ball.r>paddle.y && ball.x>paddle.x && ball.x<paddle.x+paddle.w){
 
-   ball.dy=-Math.abs(ball.dy);
+  if(
+   ball.dy > 0 &&
+   ball.y + ball.r > paddle.y &&
+   ball.x > paddle.x &&
+   ball.x < paddle.x + paddle.w
+){
+
+   ball.dy = -Math.abs(ball.dy);
+
+   ball.y = paddle.y - ball.r - 1;
 
    ball.dx += (Math.random()-0.5)*0.15;
 
