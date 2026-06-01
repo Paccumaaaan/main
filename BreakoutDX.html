@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Breakout DX</title>
+<title>Breakout</title>
 <style>
 body{margin:0;background:#08111f;color:#fff;font-family:sans-serif;overflow:hidden}
 canvas{display:block;touch-action:none}
@@ -15,7 +15,8 @@ canvas{display:block;touch-action:none}
 </audio>
 <canvas id="game"></canvas>
 <script>
-const c=game,ctx=c.getContext("2d");
+const c = document.getElementById("game");
+const ctx = c.getContext("2d");
 function rs(){c.width=innerWidth;c.height=innerHeight}rs();addEventListener("resize",rs);
 
 let state="title",score=0,combo=0,life=3,stage=1,hiscore=+localStorage.breakoutHiscore||0;
@@ -130,13 +131,25 @@ function draw(){
  ctx.fillStyle=g;ctx.fillRect(0,0,c.width,c.height);
 
  if(state==="title"){
+   ctx.fillStyle="#ffffff";
    ctx.textAlign="center";
+
    ctx.font="bold 48px sans-serif";
-   ctx.fillText("BREAKOUT DX",c.width/2,c.height/2-40);
+   ctx.fillText(
+      "BREAKOUT DX",
+      c.width/2,
+      c.height/2-40
+   );
+
    ctx.font="24px sans-serif";
-   ctx.fillText("タップしてスタート",c.width/2,c.height/2+20);
+   ctx.fillText(
+      "タップしてスタート",
+      c.width/2,
+      c.height/2+20
+   );
+
    return;
- }
+}
 
  blocks.forEach(b=>{
    ctx.fillStyle=b.color;
