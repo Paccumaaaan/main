@@ -125,57 +125,34 @@ min="1">
 <button
 class="red"
 onclick="playRedBlue('赤')">
-
 赤
-
 </button>
 
 <button
 class="blue"
 onclick="playRedBlue('青')">
-
 青
-
 </button>
 
 </div>
 
-<div class="panel">
-
-<h2>🎡 ルーレット 🎡 </h2>
-
-<canvas
-id="rouletteCanvas"
-width="420"
-height="420">
-</canvas>
-
-<br><br>
-
-<div id="rouletteResult">
-ルーレット準備完了
-</div>
-
-</div>
-    
 <script>
 
-let medals=
+let medals =
 Number(
-localStorage.medals
-|| 100
+localStorage.medals || 100
 );
 
 function saveData(){
 
-    localStorage.medals=
+    localStorage.medals =
     medals;
 
     document
     .getElementById(
         "medals"
     )
-    .textContent=
+    .textContent =
     medals;
 }
 
@@ -189,7 +166,7 @@ text
     .getElementById(
         "message"
     )
-    .innerHTML=
+    .innerHTML =
     text;
 }
 
@@ -214,7 +191,7 @@ function playRedBlue(
 choice
 ){
 
-    let bet=
+    let bet =
     Number(
     document
     .getElementById(
@@ -223,70 +200,70 @@ choice
     );
 
     if(
-    bet<1
+    bet < 1
     ||
-    bet>medals
+    bet > medals
     ){
         return;
     }
 
-    const overlay=
+    const overlay =
     document
     .getElementById(
     "overlay"
     );
 
-    overlay.style.display=
+    overlay.style.display =
     "flex";
 
-    overlay.style.color=
+    overlay.style.color =
     "white";
 
-    overlay.textContent=
+    overlay.textContent =
     "選ばれた色は……";
 
     setTimeout(()=>{
 
-        let result=
+        let result =
 
-        Math.random()<0.5
+        Math.random() < 0.5
 
         ? "赤"
 
         : "青";
 
-        overlay.textContent=
+        overlay.textContent =
         result;
 
-        overlay.style.color=
+        overlay.style.color =
 
-        result==="赤"
+        result === "赤"
 
         ? "red"
 
         : "deepskyblue";
 
         if(
-        result===choice
+        result === choice
         ){
 
-            medals+=bet;
+            medals += bet;
 
             flashWin();
 
             showMessage(
             "🎉 勝利！ +"
-            +bet+
+            + bet +
             "枚"
             );
 
         }else{
 
-            medals-=bet;
+            medals -= bet;
 
             showMessage(
             "💀 敗北 -"
-            +bet+
+            + bet +
             "枚"
             );
         }
@@ -295,7 +272,7 @@ choice
 
         setTimeout(()=>{
 
-            overlay.style.display=
+            overlay.style.display =
             "none";
 
         },1200);
@@ -305,60 +282,5 @@ choice
 
 </script>
 
-const rouletteCanvas =
-document.getElementById(
-"rouletteCanvas"
-);
-
-const rouletteCtx =
-rouletteCanvas.getContext(
-"2d"
-);
-
-function drawTestRoulette(){
-
-const ctx =
-rouletteCtx;
-
-ctx.clearRect(
-0,
-0,
-420,
-420
-);
-
-ctx.beginPath();
-
-ctx.arc(
-210,
-210,
-180,
-0,
-Math.PI*2
-);
-
-ctx.fillStyle =
-"red";
-
-ctx.fill();
-
-ctx.beginPath();
-
-ctx.arc(
-210,
-210,
-90,
-0,
-Math.PI*2
-);
-
-ctx.fillStyle =
-"black";
-
-ctx.fill();
-}
-
-drawTestRoulette();
-    
 </body>
 </html>
