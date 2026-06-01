@@ -510,6 +510,180 @@ ctx.fillRect(
 }
 
 drawRoulette();
+
+function spinRoulette(selectedColor){
+
+const bet =
+Number(
+document.getElementById(
+"rouletteBet"
+).value
+);
+
+if(
+bet < 1 ||
+bet > medals
+){
+return;
+}
+
+const selectedNumber =
+Number(
+document.getElementById(
+"numberBet"
+).value
+);
+
+const startAngle =
+rouletteAngle;
+
+const targetAngle =
+
+rouletteAngle +
+
+(Math.PI * 20) +
+
+(Math.random() * 6);
+
+const startTime =
+performance.now();
+
+function animate(now){
+
+const progress =
+
+Math.min(
+(now - startTime)
+/ 5000,
+1
+);
+
+const ease =
+
+1 -
+Math.pow(
+1 - progress,
+3
+);
+
+rouletteAngle =
+
+startAngle +
+
+(
+targetAngle -
+startAngle
+)
+
+* ease;
+
+drawRoulette();
+
+if(progress < 1){
+
+requestAnimationFrame(
+animate
+);
+
+}else{
+
+finishRoulette(
+selectedColor,
+selectedNumber,
+bet
+);
+
+}
+}
+
+requestAnimationFrame(
+animate
+);
+}
+
+function finishRoulette(
+
+selectedColor,
+selectedNumber,
+bet
+
+){
+
+const result =
+
+rouletteNumbers[
+Math.floor(
+Math.random()*37
+)
+];
+
+let resultColor;
+
+if(result===0){
+
+resultColor =
+"緑";
+
+}else if(
+
+redNumbers.includes(
+result
+)
+
+){
+
+resultColor =
+"赤";
+
+}else{
+
+resultColor =
+"黒";
+}
+
+let reward = 0;
+
+if(
+resultColor ===
+selectedColor
+){
+
+reward +=
+bet * 2;
+}
+
+if(
+result ===
+selectedNumber
+){
+
+reward +=
+bet * 20;
+}
+
+medals +=
+reward -
+bet;
+
+saveData();
+
+document
+.getElementById(
+"rouletteResult"
+)
+.innerHTML =
+
+"結果: " +
+result +
+
+" (" +
+resultColor +
+")<br>" +
+
+"獲得: " +
+reward +
+"枚";
+}
     
 </script>
 
