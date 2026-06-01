@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
-<title>Tetris — Mobile Fixed</title>
+<title>Tetris</title>
 <style>
   :root{--bg:#0f1720;--panel:#0b1220;}
   html,body{
@@ -256,7 +256,7 @@ function createRepeater(fn, {initialDelay=180, repeatDelay=60} = {}){
       const newL = Math.floor(state.lines/10) + 1;
       if(newL > state.level){
         state.level = newL;
-        state.dropInterval = Math.max(100, 1000 - (state.level - 1) * 80);
+        state.dropInterval = Math.max(250, 1000 - (state.level - 1) * 35);
       }
       updateHUD();
       flashLine();
