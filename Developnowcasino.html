@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>開発中...</title>
+<title>近日公開</title>
 
 <style>
 *{
@@ -13,87 +13,78 @@
 }
 
 body{
-    overflow:hidden;
     background:#000;
+    overflow:hidden;
     font-family:sans-serif;
 }
 
 #bgVideo{
     position:fixed;
-    top:0;
-    left:0;
+    inset:0;
     width:100%;
     height:100%;
     object-fit:cover;
     z-index:-1;
 }
 
-.overlay{
+#menu{
     position:fixed;
     inset:0;
-    background:rgba(0,0,0,0.4);
     display:flex;
     flex-direction:column;
     justify-content:center;
     align-items:center;
-    text-align:center;
+    background:rgba(0,0,0,.45);
 }
 
 .title{
     color:white;
     font-size:clamp(2rem,5vw,5rem);
-    font-weight:bold;
-    text-shadow:0 0 20px rgba(255,255,255,0.8);
-    animation:fade 2s infinite;
+    margin-bottom:20px;
 }
 
 .sub{
-    margin-top:20px;
     color:#ddd;
-    font-size:clamp(1rem,2vw,1.5rem);
+    margin-bottom:30px;
 }
 
-.start{
-    margin-top:30px;
-    padding:12px 24px;
+#playBtn{
+    padding:14px 28px;
     border:none;
     border-radius:12px;
     font-size:1rem;
     cursor:pointer;
-}
-
-@keyframes fade{
-    0%{opacity:0.7;}
-    50%{opacity:1;}
-    100%{opacity:0.7;}
 }
 </style>
 </head>
 
 <body>
 
-<video
-    id="bgVideo"
-    loop
-    playsinline
->
+<video id="bgVideo" loop playsinline>
     <source src="bg.mp4" type="video/mp4">
 </video>
 
-<div class="overlay">
+<div id="menu">
     <div class="title">現在開発中です...</div>
     <div class="sub">公開までしばらくお待ちください</div>
-    <button class="start" onclick="startVideo()">
-        タップして再生
+
+    <button id="playBtn">
+        ▶ 予告動画再生する
     </button>
 </div>
 
 <script>
-function startVideo(){
-    const video=document.getElementById("bgVideo");
-    video.play();
-    document.querySelector(".start").style.display="none";
-}
+const btn=document.getElementById("playBtn");
+const menu=document.getElementById("menu");
+const video=document.getElementById("bgVideo");
+
+btn.onclick=async()=>{
+    menu.remove();
+
+    try{
+        await video.play();
+    }catch(e){}
+};
 </script>
 
 </body>
