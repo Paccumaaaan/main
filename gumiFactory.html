@@ -2,255 +2,415 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Paccumaaaan Gum Factory</title>
+
 <style>
-body{
+*{
 margin:0;
-font-family:sans-serif;
-background:#10141f;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+background:#171717;
 color:white;
-text-align:center;
+font-family:sans-serif;
+padding-bottom:80px;
 }
-h1{
-margin-top:20px;
+
+header{
+position:sticky;
+top:0;
+background:#222;
+padding:12px;
+border-bottom:2px solid #333;
+z-index:100;
 }
-#gum{
-font-size:40px;
-margin:20px;
+
+.stats{
+display:flex;
+gap:10px;
+overflow:auto;
 }
-button{
-padding:12px 20px;
-margin:5px;
-font-size:16px;
-cursor:pointer;
-border:none;
-border-radius:8px;
-}
-.main{
-max-width:900px;
-margin:auto;
-}
-.panel{
-background:#1a2133;
-padding:15px;
-margin:10px;
+
+.stat{
+background:#2d2d2d;
+padding:10px 15px;
 border-radius:12px;
+white-space:nowrap;
+}
+
+.factoryArea{
+position:relative;
+max-width:1200px;
+margin:auto;
+padding:20px;
+}
+
+.factoryImage{
+width:100%;
+display:block;
+image-rendering:pixelated;
+}
+
+.gummyLayer{
+position:absolute;
+inset:20px;
+overflow:hidden;
+pointer-events:none;
+}
+
+.gummy{
+position:absolute;
+font-size:24px;
+animation-name:move;
+animation-timing-function:linear;
+animation-iteration-count:infinite;
+}
+
+@keyframes move{
+from{
+left:-5%;
+}
+to{
+left:105%;
+}
+}
+
+.panel{
+max-width:1200px;
+margin:0 auto 20px;
+background:#222;
+padding:15px;
+border-radius:15px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:10px;
+}
+
+.card{
+background:#303030;
+padding:12px;
+border-radius:12px;
+}
+
+.skillTree{
+display:flex;
+justify-content:center;
+padding:20px;
+overflow:auto;
+}
+
+.node{
+width:70px;
+height:70px;
+border-radius:50%;
+background:#333;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:28px;
+border:3px solid #555;
+cursor:pointer;
+transition:.2s;
+}
+
+.node.unlocked{
+background:#4caf50;
+border-color:#7cff84;
+}
+
+.node.locked{
+opacity:.4;
+}
+
+.row{
+display:flex;
+justify-content:center;
+gap:20px;
+margin:15px 0;
+}
+
+.tabs{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+display:grid;
+grid-template-columns:repeat(4,1fr);
+background:#222;
+border-top:2px solid #333;
+}
+
+.tab{
+padding:12px;
+text-align:center;
 }
 </style>
 </head>
+
 <body>
 
-<div class="main">
+<header>
+<div class="stats">
+<div class="stat">🍬 <span id="gum">1.28e245</span></div>
+<div class="stat">⚡ <span id="speed">125</span></div>
+<div class="stat">⭐ PP 250K</div>
+<div class="stat">🏆 Promote 12</div>
+<div class="stat">🌳 SP <span id="sp">15</span></div>
+</div>
+</header>
 
-<h1>Paccumaaaan Gum Factory</h1>
+<div class="factoryArea">
 
-<div id="gum">0 グミ</div>
+<img
+id="factoryImage"
+class="factoryImage"
+src="RainbowFactory.png"
+>
 
-<button onclick="clickGum()">グミを作る</button>
-
-<div class="panel">
-<h2>設備</h2>
-
-<button onclick="buyAuto()">
-オートクリッカー
-Lv.<span id="autoLv">0</span>
-(<span id="autoCost">10</span>)
-</button>
-
-<button onclick="buyPower()">
-圧縮機
-Lv.<span id="powerLv">0</span>
-(<span id="powerCost">25</span>)
-</button>
-
-<button onclick="buyLine()">
-生産ライン
-Lv.<span id="lineLv">0</span>
-(<span id="lineCost">100</span>)
-</button>
+<div
+class="gummyLayer"
+id="gummyLayer"
+></div>
 
 </div>
 
 <div class="panel">
-<h2>プレステージ</h2>
+<h2>🏭 工場設備</h2>
+
+<div class="grid">
+
+<div class="card">
+🤖 オートクリッカー Lv.50
+</div>
+
+<div class="card">
+⚙️ 圧縮機 Lv.25
+</div>
+
+<div class="card">
+🏭 生産ライン Lv.10
+</div>
+
+<div class="card">
+📦 出荷センター Lv.5
+</div>
+
+</div>
+</div>
+
+<div class="panel">
+
+<h2>🌳 スキルツリー</h2>
+
+<div class="skillTree">
 
 <div>
-PP:
-<span id="pp">0</span>
+
+<div class="row">
+<div
+class="node unlocked"
+id="up1"
+onclick="buyNode('up1',5)"
+>
+⚡
+</div>
 </div>
 
-<button onclick="prestige()">
-プレステージ
-</button>
+<div class="row">
+
+<div
+class="node locked"
+id="left1"
+onclick="buyNode('left1',5)"
+>
+⭐
+</div>
+
+<div
+class="node unlocked"
+id="center"
+>
+🏭
+</div>
+
+<div
+class="node locked"
+id="right1"
+onclick="buyNode('right1',5)"
+>
+⚙️
+</div>
 
 </div>
 
+<div class="row">
+<div
+class="node locked"
+id="down1"
+onclick="buyNode('down1',5)"
+>
+🔓
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="panel">
+
+<h2>🎯 マイルストーン</h2>
+
+<div class="card">
+✅ ゴールデングミ解禁
+</div>
+
+<div class="card">
+✅ 工場暴走解禁
+</div>
+
+<div class="card">
+🔒 研究所解禁
+</div>
+
+</div>
+
+<div class="tabs">
+<div class="tab">🏭<br>設備</div>
+<div class="tab">⭐<br>転生</div>
+<div class="tab">🌳<br>スキル</div>
+<div class="tab">📖<br>実績</div>
 </div>
 
 <script>
-let gum=0;
-let totalGum=0;
 
-let autoLv=0;
-let powerLv=0;
-let lineLv=0;
+let sp = 15;
 
-let pp=0;
+let speedLevel = 125;
+let gummyCount = 10;
 
-let autoCost=10;
-let powerCost=25;
-let lineCost=100;
+function spawnGummies(){
 
-let lastTime=Date.now();
-
-function gainPerClick(){
-return (1+powerLv)*(1+pp);
-}
-
-function gainPerSecond(){
-return autoLv*(1+powerLv)*(1+lineLv)*(1+pp);
-}
-
-function format(n){
-if(n<1000)return Math.floor(n);
-return n.toExponential(2);
-}
-
-function clickGum(){
-let gain=gainPerClick();
-gum+=gain;
-totalGum+=gain;
-}
-
-function buyAuto(){
-if(gum<autoCost)return;
-gum-=autoCost;
-autoLv++;
-autoCost=Math.floor(autoCost*1.15);
-}
-
-function buyPower(){
-if(gum<powerCost)return;
-gum-=powerCost;
-powerLv++;
-powerCost=Math.floor(powerCost*1.2);
-}
-
-function buyLine(){
-if(gum<lineCost)return;
-gum-=lineCost;
-lineLv++;
-lineCost=Math.floor(lineCost*1.3);
-}
-
-function prestige(){
-
-if(totalGum<100000)return;
-
-let gain=Math.floor(
-Math.sqrt(totalGum/100000)
+const layer =
+document.getElementById(
+"gummyLayer"
 );
 
-if(gain<=0)return;
+layer.innerHTML = "";
 
-pp+=gain;
+for(
+let i=0;
+i<gummyCount;
+i++
+){
 
-gum=0;
+const gummy =
+document.createElement("div");
 
-autoLv=0;
-powerLv=0;
-lineLv=0;
+gummy.className =
+"gummy";
 
-autoCost=10;
-powerCost=25;
-lineCost=100;
-}
+const line =
+i % 3;
 
-function update(){
+gummy.style.top =
+(35 + line * 16) + "%";
 
-document.getElementById("gum").textContent=
-format(gum)+" グミ";
+gummy.style.animationDuration =
+(8 / speedLevel * 100) + "s";
 
-document.getElementById("autoLv").textContent=
-autoLv;
+gummy.style.animationDelay =
+(-Math.random()*5) + "s";
 
-document.getElementById("powerLv").textContent=
-powerLv;
+gummy.textContent =
+"🍬";
 
-document.getElementById("lineLv").textContent=
-lineLv;
-
-document.getElementById("autoCost").textContent=
-format(autoCost);
-
-document.getElementById("powerCost").textContent=
-format(powerCost);
-
-document.getElementById("lineCost").textContent=
-format(lineCost);
-
-document.getElementById("pp").textContent=
-pp;
-}
-
-setInterval(()=>{
-
-let gain=gainPerSecond()/10;
-
-gum+=gain;
-totalGum+=gain;
-
-update();
-
-},100);
-
-function save(){
-
-localStorage.setItem(
-"gumFactory",
-JSON.stringify({
-gum,
-totalGum,
-autoLv,
-powerLv,
-lineLv,
-pp,
-autoCost,
-powerCost,
-lineCost,
-lastTime:Date.now()
-})
+layer.appendChild(
+gummy
 );
 
 }
 
-setInterval(save,5000);
+}
 
-function load(){
+function buyNode(
+id,
+cost
+){
 
-let s=
-localStorage.getItem("gumFactory");
+if(sp < cost)
+return;
 
-if(!s)return;
+const node =
+document.getElementById(id);
 
-let d=JSON.parse(s);
+if(
+node.classList.contains(
+"unlocked"
+)
+)
+return;
 
-Object.assign(window,d);
+sp -= cost;
 
-let offline=
-(Date.now()-d.lastTime)/1000;
+document.getElementById(
+"sp"
+).textContent = sp;
 
-let gain=
-gainPerSecond()*offline;
+node.classList.remove(
+"locked"
+);
 
-gum+=gain;
-totalGum+=gain;
+node.classList.add(
+"unlocked"
+);
+
+if(id==="up1"){
+speedLevel += 50;
+}
+
+if(id==="right1"){
+gummyCount += 10;
+}
+
+if(id==="down1"){
+
+const milestone =
+document.querySelector(
+".panel:last-of-type"
+);
+
+const card =
+document.createElement(
+"div"
+);
+
+card.className =
+"card";
+
+card.textContent =
+"✅ 工場AI解禁";
+
+milestone.appendChild(
+card
+);
 
 }
 
-load();
-update();
+spawnGummies();
+
+}
+
+spawnGummies();
+
 </script>
 
 </body>
