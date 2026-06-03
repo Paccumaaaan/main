@@ -3,35 +3,89 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>Snake</title>
+<title>GUMMY SNAKE</title>
 <style>
+*{
+box-sizing:border-box;
+-webkit-tap-highlight-color:transparent;
+}
+
 body{
 margin:0;
-background:#111;
-color:#fff;
 font-family:sans-serif;
+background:linear-gradient(180deg,#7ed957,#59b93d);
 display:flex;
-flex-direction:column;
+justify-content:center;
 align-items:center;
-touch-action:none;
+min-height:100vh;
+color:white;
+overflow:hidden;
 user-select:none;
--webkit-user-select:none;
+}
+
+.screen{
+width:100%;
+max-width:520px;
+padding:20px;
+text-align:center;
 }
 
 h1{
-margin:15px 0 5px;
+margin:10px 0;
+font-size:42px;
 }
 
-#score{
+.panel{
+background:rgba(0,0,0,.25);
+border-radius:20px;
+padding:15px;
+margin:15px 0;
+backdrop-filter:blur(4px);
+}
+
+.scoreLine{
+font-size:24px;
+margin:8px 0;
+}
+
+.big{
+font-size:32px;
+font-weight:bold;
+}
+
+button{
+border:none;
+border-radius:18px;
+background:#ff5cb8;
+color:white;
+font-size:22px;
+font-weight:bold;
+padding:14px 26px;
+cursor:pointer;
+}
+
+button:active{
+transform:scale(.95);
+}
+
+#gameScreen{
+display:none;
+}
+
+#hud{
+display:flex;
+justify-content:space-between;
 font-size:22px;
 margin-bottom:10px;
 }
 
 canvas{
-background:#000;
-border:3px solid #444;
-max-width:95vw;
-max-height:95vw;
+border:4px solid rgba(255,255,255,.4);
+border-radius:12px;
+background:#7ac84a;
+width:100%;
+max-width:500px;
+aspect-ratio:1/1;
 }
 
 #controls{
@@ -47,18 +101,11 @@ display:flex;
 gap:8px;
 }
 
-button{
-width:70px;
-height:70px;
-font-size:28px;
-border:none;
-border-radius:12px;
-background:#2d2d2d;
-color:white;
-}
-
-button:active{
-transform:scale(0.95);
+.ctrl{
+width:80px;
+height:80px;
+padding:0;
+font-size:32px;
 }
 
 #gameOver{
@@ -66,78 +113,157 @@ position:fixed;
 inset:0;
 background:rgba(0,0,0,.85);
 display:none;
-flex-direction:column;
 justify-content:center;
 align-items:center;
-gap:15px;
-font-size:28px;
+padding:20px;
 }
 
-#restart{
-width:180px;
-height:60px;
-font-size:22px;
+#gameOverBox{
+background:#2d2d2d;
+padding:25px;
+border-radius:20px;
+width:100%;
+max-width:400px;
+text-align:center;
+}
+
+#newRecord{
+color:#ffd700;
+font-size:28px;
+margin:12px 0;
+display:none;
 }
 </style>
 </head>
 <body>
 
-<h1>🐍 SNAKE</h1>
-<div id="score">Score: 0</div>
+<div id="titleScreen" class="screen">
 
-<canvas id="game" width="400" height="400"></canvas>
+<h1>🐍<br>GUMMY SNAKE</h1>
+
+<div class="panel">
+<div class="big">HIGH SCORES</div>
+
+<div class="scoreLine">🥇 <span id="hs1">0</span></div>
+<div class="scoreLine">🥈 <span id="hs2">0</span></div>
+<div class="scoreLine">🥉 <span id="hs3">0</span></div>
+</div>
+
+<div class="panel">
+<div class="big">GAME COINS</div>
+<div id="coinDisplay" class="big">0</div>
+</div>
+
+<button id="startBtn">START</button>
+
+</div>
+
+<div id="gameScreen" class="screen">
+
+<div id="hud">
+<div>Score: <span id="score">0</span></div>
+<div>Coins: <span id="coins">0</span></div>
+</div>
+
+<canvas id="game" width="500" height="500"></canvas>
 
 <div id="controls">
-<button id="up">↑</button>
+<button class="ctrl" id="up">↑</button>
 
 <div class="row">
-<button id="left">←</button>
-<button id="down">↓</button>
-<button id="right">→</button>
+<button class="ctrl" id="left">←</button>
+<button class="ctrl" id="down">↓</button>
+<button class="ctrl" id="right">→</button>
 </div>
+</div>
+
 </div>
 
 <div id="gameOver">
-<div>GAME OVER</div>
-<div id="finalScore"></div>
-<button id="restart">リスタート</button>
+
+<div id="gameOverBox">
+
+<h2>GAME OVER</h2>
+
+<div class="big">
+Score:
+<span id="finalScore">0</span>
+</div>
+
+<div id="newRecord">
+🏆 NEW RECORD!
+</div>
+
+<div class="panel">
+<div class="big">
+GAME COINS
+</div>
+<div id="finalCoins" class="big">
+0
+</div>
+</div>
+
+<button id="playAgain">
+PLAY AGAIN
+</button>
+
+<br><br>
+
+<button id="backTitle">
+TITLE
+</button>
+
+</div>
+
 </div>
 
 <script>
+const STORAGE_KEY="gummySnakeHighScores";
+
 const canvas=document.getElementById("game");
 const ctx=canvas.getContext("2d");
 
-const size=20;
+const tileSize=25;
 const tiles=20;
 
-let snake;
-let food;
-let dx;
-let dy;
-let score;
-let gameLoop;
+let snake=[];
+let food={x:0,y:0};
 
-function startGame(){
+let dx=1;
+let dy=0;
 
-snake=[
-{x:10,y:10}
-];
+let score=0;
+let loop=null;
 
-food=randomFood();
+function getScores(){
+return JSON.parse(
+localStorage.getItem(STORAGE_KEY)||"[0,0,0]"
+);
+}
 
-dx=1;
-dy=0;
+function saveScores(scores){
+localStorage.setItem(
+STORAGE_KEY,
+JSON.stringify(scores)
+);
+}
 
-score=0;
+function getCoins(){
+const s=getScores();
+return Math.floor(
+(s[0]+s[1]+s[2])/5
+);
+}
 
-document.getElementById("score").textContent=
-"Score: 0";
+function updateTitle(){
+const s=getScores();
 
-document.getElementById("gameOver").style.display=
-"none";
+document.getElementById("hs1").textContent=s[0];
+document.getElementById("hs2").textContent=s[1];
+document.getElementById("hs3").textContent=s[2];
 
-clearInterval(gameLoop);
-gameLoop=setInterval(update,120);
+document.getElementById("coinDisplay").textContent=
+getCoins();
 }
 
 function randomFood(){
@@ -153,148 +279,100 @@ y:Math.floor(Math.random()*tiles)
 
 }while(
 snake.some(
-s=>s.x===pos.x&&s.y===pos.y
+p=>p.x===pos.x&&p.y===pos.y
 )
 );
 
 return pos;
 }
 
-function update(){
+function startGame(){
 
-const head={
-x:snake[0].x+dx,
-y:snake[0].y+dy
-};
-
-if(
-head.x<0||
-head.y<0||
-head.x>=tiles||
-head.y>=tiles
-){
-return endGame();
-}
-
-for(let part of snake){
-
-if(
-head.x===part.x&&
-head.y===part.y
-){
-return endGame();
-}
-}
-
-snake.unshift(head);
-
-if(
-head.x===food.x&&
-head.y===food.y
-){
-
-score++;
-
-document.getElementById("score").textContent=
-"Score: "+score;
+snake=[
+{x:10,y:10},
+{x:9,y:10},
+{x:8,y:10}
+];
 
 food=randomFood();
 
-}else{
+dx=1;
+dy=0;
+score=0;
 
-snake.pop();
-}
+document.getElementById("score").textContent=0;
+document.getElementById("coins").textContent=getCoins();
+
+document.getElementById("gameOver").style.display="none";
+
+clearInterval(loop);
+loop=setInterval(update,120);
 
 draw();
 }
 
+function drawGrass(){
+
+for(let y=0;y<tiles;y++){
+
+for(let x=0;x<tiles;x++){
+
+ctx.fillStyle=
+(x+y)%2===0
+?"#8dde63"
+:"#78cc51";
+
+ctx.fillRect(
+x*tileSize,
+y*tileSize,
+tileSize,
+tileSize
+);
+
+}
+
+}
+
+}
+
 function draw(){
 
-ctx.fillStyle="#000";
-ctx.fillRect(
+drawGrass();
+
+ctx.fillStyle="#ff4fa3";
+
+ctx.beginPath();
+
+ctx.arc(
+food.x*tileSize+tileSize/2,
+food.y*tileSize+tileSize/2,
+tileSize/3,
 0,
-0,
-canvas.width,
-canvas.height
+Math.PI*2
 );
 
-ctx.fillStyle="red";
-
-ctx.fillRect(
-food.x*size,
-food.y*size,
-size,
-size
-);
+ctx.fill();
 
 snake.forEach((part,index)=>{
 
 ctx.fillStyle=
 index===0
-?"#66ff66"
-:"#22aa22";
+?"#b4ff8a"
+:"#2ecc71";
 
 ctx.fillRect(
-part.x*size,
-part.y*size,
-size,
-size
+part.x*tileSize,
+part.y*tileSize,
+tileSize,
+tileSize
 );
 
-ctx.strokeStyle="#111";
+ctx.strokeStyle=
+"rgba(0,0,0,.2)";
+
 ctx.strokeRect(
-part.x*size,
-part.y*size,
-size,
-size
-);
-
-});
-}
-
-function endGame(){
-
-clearInterval(gameLoop);
-
-document.getElementById("finalScore").textContent=
-"Score: "+score;
-
-document.getElementById("gameOver").style.display=
-"flex";
-}
-
-function changeDirection(newDx,newDy){
-
-if(
-snake.length>1 &&
-newDx===-dx &&
-newDy===-dy
-){
-return;
-}
-
-dx=newDx;
-dy=newDy;
-}
-
-document.getElementById("up").onclick=
-()=>changeDirection(0,-1);
-
-document.getElementById("down").onclick=
-()=>changeDirection(0,1);
-
-document.getElementById("left").onclick=
-()=>changeDirection(-1,0);
-
-document.getElementById("right").onclick=
-()=>changeDirection(1,0);
-
-document.getElementById("restart").onclick=
-startGame;
-
-draw();
-startGame();
-</script>
-
-</body>
-</html>
+part.x*tileSize,
+part.y*tileSize,
+tileSize,
+tileSize
+)
