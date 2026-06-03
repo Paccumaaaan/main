@@ -191,7 +191,7 @@ font-weight:bold;
 </ul>
 </div>
 
-<div class="role" onclick="launchGame('snakegame.html',this)">
+  <div class="role" onclick="buySnake(this)">
 <h2>
 スネークゲーム
 <span class="badge">snakegame</span>
@@ -280,6 +280,57 @@ No game No Life
 
 }
 
+function buySnake(card){
+
+  let coins =
+  Number(
+    localStorage.getItem(
+      "totalCoins"
+    )
+  ) || 0;
+
+  let unlocked =
+  localStorage.getItem(
+    "snakeUnlocked"
+  );
+
+  if(unlocked==="true"){
+    launchGame(
+      "snakegame.html",
+      card
+    );
+    return;
+  }
+
+  if(coins < 10){
+    alert(
+      "スネークゲーム解放には10コイン必要です！"
+    );
+    return;
+  }
+
+  coins -= 10;
+
+  localStorage.setItem(
+    "totalCoins",
+    coins
+  );
+
+  localStorage.setItem(
+    "snakeUnlocked",
+    "true"
+  );
+
+  alert(
+    "スネークゲームを解放しました！"
+  );
+
+  launchGame(
+    "snakegame.html",
+    card
+  );
+}
+  
 updateCoinDisplay();
   
   function launchGame(url,card){
