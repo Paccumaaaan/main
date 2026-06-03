@@ -108,6 +108,12 @@ footer{
   z-index:9999;
 }
 
+#coinBox{
+margin-bottom:20px;
+font-size:24px;
+font-weight:bold;
+}
+  
 #transition.active{
   opacity:1;
 }
@@ -148,7 +154,11 @@ footer{
 
 <body>
 
-<div class="container">
+  <div id="coinBox">
+🪙 <span id="coinCount">0</span>
+</div>
+
+  <div class="container">
 
 <header>
 <h1>ゲーム</h1>
@@ -256,7 +266,23 @@ No game No Life
 </div>
 
 <script>
-function launchGame(url,card){
+
+  function updateCoinDisplay(){
+
+ document.getElementById(
+   "coinCount"
+ ).textContent =
+ Number(
+   localStorage.getItem(
+     "totalCoins"
+   )
+ ) || 0;
+
+}
+
+updateCoinDisplay();
+  
+  function launchGame(url,card){
 
   document.querySelectorAll(".role").forEach(el=>{
     el.style.pointerEvents="none";
