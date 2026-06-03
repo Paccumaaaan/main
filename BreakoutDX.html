@@ -19,8 +19,8 @@ const c = document.getElementById("game");
 const ctx = c.getContext("2d");
 function rs(){c.width=innerWidth;c.height=innerHeight}rs();addEventListener("resize",rs);
 
-let state="title",score=0,combo=0,life=3,stage=1,hiscore=+localStorage.breakoutHiscore||0;
-let coins=Number(localStorage.getItem("coins"))||0;
+let state="title",score=0,combo=0,life=3,stage=1,hiscore=+localStorage.
+ let coins=Number(localStorage.getItem("totalCoins"))||0;
 const rank=()=>JSON.parse(localStorage.breakoutRanking||"[]");
 function addCoinsFromScore(s){
  const earned=Math.floor(s/100000);
