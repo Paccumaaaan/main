@@ -21,6 +21,7 @@ function rs(){c.width=innerWidth;c.height=innerHeight}rs();addEventListener("res
 
 let state="title",score=0,combo=0,life=3,stage=1,hiscore=+localStorage.
  let coins=Number(localStorage.getItem("totalCoins"))||0;
+ 
 const rank=()=>JSON.parse(localStorage.breakoutRanking||"[]");
 function addCoinsFromScore(s){
  const earned=Math.floor(s/100000);
