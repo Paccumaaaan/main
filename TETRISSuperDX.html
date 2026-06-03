@@ -194,10 +194,10 @@ function createRepeater(fn, {initialDelay=180, repeatDelay=60} = {}){
   const linesEl = document.getElementById('lines');
   const nextEl = document.getElementById('next');
 
-  let coins = Number(localStorage.getItem('tetrisCoins')) || 0;
-  function saveCoins(){
-    localStorage.setItem('tetrisCoins', coins);
-  }
+  let coins = Number(localStorage.getItem('totalCoins')) || 0;
+function saveCoins(){
+  localStorage.setItem('totalCoins', coins);
+}
 
   const COLS=10,ROWS=20;
   let BLOCK=Math.floor(Math.min(window.innerWidth,window.innerHeight)/22);
