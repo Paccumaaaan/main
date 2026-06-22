@@ -169,20 +169,54 @@ rerollButton.disabled = true;
         genre = selectedGenre;
     }
 
-    const list = questions[genre];
+    const list = questions[
 
-    if (list.length === 0) {
-        document.getElementById("genreResult").textContent = genre;
-        document.getElementById("questionResult").textContent = "このジャンルにはまだ質問がありません";
-        return;
-    }
+        if (list.length === 0) {
 
-    const question =
-        list[Math.floor(Math.random() * list.length)];
+    isRolling = false;
+
+    generateButton.disabled = false;
+    rerollButton.disabled = false;
 
     document.getElementById("genreResult").textContent = genre;
-    document.getElementById("questionResult").textContent = question;
+    document.getElementById("questionResult").textContent = "このジャンルにはまだ質問がありません";
+    return;
+}
 
+    const question =
+    list[Math.floor(Math.random() * list.length)];
+
+let count = 0;
+
+const roulette = setInterval(() => {
+
+    const genres = Object.keys(questions);
+
+    document.getElementById("genreResult").textContent =
+        genres[Math.floor(Math.random() * genres.length)];
+
+    document.getElementById("questionResult").textContent =
+        "抽選中...";
+
+    count++;
+
+    if (count >= 15) {
+
+        clearInterval(roulette);
+
+        isRolling = false;
+
+        generateButton.disabled = false;
+        rerollButton.disabled = false;
+
+        document.getElementById("genreResult").textContent = genre;
+
+        document.getElementById("questionResult").textContent = question;
+
+    }
+
+}, 50);
+    
 });
 
 const rerollButton = document.getElementById("rerollButton");
