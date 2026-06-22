@@ -95,7 +95,9 @@ button:active{
 
 <button>もう一回</button>
 
-<button class="copyButton">質問をコピー</button>
+    <button id="copyButton" class="copyButton">質問をコピー</button>
+
+    <div id="copyMessage"></div>
 
 </div>
 
@@ -178,6 +180,32 @@ const rerollButton = document.getElementById("rerollButton");
 rerollButton.addEventListener("click", () => {
     generateButton.click();
 });
+
+const copyButton = document.getElementById("copyButton");
+
+copyButton.addEventListener("click", () => {
+
+    const genre =
+        document.getElementById("genreResult").textContent;
+
+    const question =
+        document.getElementById("questionResult").textContent;
+
+    navigator.clipboard.writeText(
+        `ジャンル：${genre}\n\n質問：${question}`
+    );
+
+    const copyMessage =
+        document.getElementById("copyMessage");
+
+    copyMessage.textContent = "コピーしました！";
+
+    setTimeout(() => {
+        copyMessage.textContent = "";
+    }, 1000);
+
+});
+
     
 </script>
 
