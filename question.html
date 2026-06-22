@@ -98,5 +98,30 @@ button:active{
 <button class="copyButton">質問をコピー</button>
 
 </div>
+
+<script>
+const questions = {
+    "自己紹介": [],
+    "学校・勉強": [],
+    "趣味・好きなもの": [],
+    "恋愛": [],
+    "オプ": [],
+    "友達・人間関係": [],
+    "人生・価値観": [],
+    "思い出・エピソード": [],
+    "日常・生活": [],
+    "自然・季節": []
+};
+
+const genreSelect = document.querySelector("select");
+
+Object.keys(questions).forEach(genre => {
+    const option = document.createElement("option");
+    option.value = genre;
+    option.textContent = genre;
+    genreSelect.appendChild(option);
+});
+</script>
+
 </body>
 </html>
