@@ -102,9 +102,8 @@ button:active{
 </div>
 
 <script>
-
 let isRolling = false;
-    
+
 const questions = {
     "自己紹介": [
         "自分の口癖は？",
@@ -147,17 +146,18 @@ Object.keys(questions).forEach(genre => {
 });
 
 const generateButton = document.getElementById("generateButton");
+const rerollButton = document.getElementById("rerollButton");
+const copyButton = document.getElementById("copyButton");
 
 generateButton.addEventListener("click", () => {
 
-if (isRolling) return;
+    if (isRolling) return;
 
-isRolling = true;
+    isRolling = true;
 
-generateButton.disabled = true;
-rerollButton.disabled = true;
+    generateButton.disabled = true;
+    rerollButton.disabled = true;
 
-    
     const selectedGenre = genreSelect.value;
 
     let genre;
@@ -169,40 +169,9 @@ rerollButton.disabled = true;
         genre = selectedGenre;
     }
 
-    const list = questions[
+    const list = questions[genre];
 
-        if (list.length === 0) {
-
-    isRolling = false;
-
-    generateButton.disabled = false;
-    rerollButton.disabled = false;
-
-    document.getElementById("genreResult").textContent = genre;
-    document.getElementById("questionResult").textContent = "このジャンルにはまだ質問がありません";
-    return;
-}
-
-    const question =
-    list[Math.floor(Math.random() * list.length)];
-
-let count = 0;
-
-const roulette = setInterval(() => {
-
-    const genres = Object.keys(questions);
-
-    document.getElementById("genreResult").textContent =
-        genres[Math.floor(Math.random() * genres.length)];
-
-    document.getElementById("questionResult").textContent =
-        "抽選中...";
-
-    count++;
-
-    if (count >= 15) {
-
-        clearInterval(roulette);
+    if (list.length === 0) {
 
         isRolling = false;
 
@@ -210,22 +179,52 @@ const roulette = setInterval(() => {
         rerollButton.disabled = false;
 
         document.getElementById("genreResult").textContent = genre;
+        document.getElementById("questionResult").textContent =
+            "このジャンルにはまだ質問がありません";
 
-        document.getElementById("questionResult").textContent = question;
-
+        return;
     }
 
-}, 50);
-    
-});
+    const question =
+        list[Math.floor(Math.random() * list.length)];
 
-const rerollButton = document.getElementById("rerollButton");
+    let count = 0;
+
+    const roulette = setInterval(() => {
+
+        const genres = Object.keys(questions);
+
+        document.getElementById("genreResult").textContent =
+            genres[Math.floor(Math.random() * genres.length)];
+
+        document.getElementById("questionResult").textContent =
+            "抽選中...";
+
+        count++;
+
+        if (count >= 15) {
+
+            clearInterval(roulette);
+
+            isRolling = false;
+
+            generateButton.disabled = false;
+            rerollButton.disabled = false;
+
+            document.getElementById("genreResult").textContent =
+                genre;
+
+            document.getElementById("questionResult").textContent =
+                question;
+        }
+
+    }, 50);
+
+});
 
 rerollButton.addEventListener("click", () => {
     generateButton.click();
 });
-
-const copyButton = document.getElementById("copyButton");
 
 copyButton.addEventListener("click", () => {
 
@@ -249,8 +248,6 @@ copyButton.addEventListener("click", () => {
     }, 1000);
 
 });
-
-    
 </script>
 
 </body>
