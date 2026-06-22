@@ -172,6 +172,12 @@ generateButton.addEventListener("click", () => {
     document.getElementById("questionResult").textContent = question;
 
 });
+
+const rerollButton = document.getElementById("rerollButton");
+
+rerollButton.addEventListener("click", () => {
+    generateButton.click();
+});
     
 </script>
 
