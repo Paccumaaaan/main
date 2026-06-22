@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>くまの質問生成</title>
+<style>
+body{
+    margin:0;
+    font-family:sans-serif;
+    background:#bfe9ff;
+    color:#2c4a5f;
+    text-align:center;
+}
+.container{
+    max-width:500px;
+    margin:auto;
+    padding:20px;
+}
+.title{
+    background:#7ecdf7;
+    color:white;
+    border-radius:20px;
+    padding:15px;
+    font-size:32px;
+    font-weight:bold;
+    margin-bottom:20px;
+}
+.kuma-image{
+    width:40vw;
+    height:40vw;
+    min-width:180px;
+    min-height:180px;
+    max-width:250px;
+    max-height:250px;
+    object-fit:cover;
+    aspect-ratio:1/1;
+    border-radius:25px;
+}
+.label{
+    background:#7ecdf7;
+    color:white;
+    border-radius:15px;
+    padding:10px;
+    margin:20px auto 10px;
+    width:max-content;
+}
+select,button{
+    width:100%;
+    border:none;
+    border-radius:18px;
+    padding:16px;
+    font-size:18px;
+    background:#98dcff;
+    color:white;
+    margin-top:10px;
+}
+button:active{
+    transform:scale(0.97);
+}
+.result{
+    background:white;
+    border-radius:25px;
+    padding:25px;
+    margin-top:25px;
+}
+.copyButton{
+    background:white;
+    color:#2c4a5f;
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="title">くまの質問生成</div>
+
+<img src="kuma.JPG" class="kuma-image">
+
+<div class="label">ジャンルを選択</div>
+
+<select>
+<option>すべて</option>
+</select>
+
+<button>質問を生成</button>
+
+<div class="result">
+<h3>ジャンル</h3>
+<div>---</div>
+
+<h3>質問</h3>
+<div>---</div>
+</div>
+
+<button>もう一回</button>
+
+<button class="copyButton">質問をコピー</button>
+
+</div>
+</body>
+</html>
