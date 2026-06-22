@@ -103,6 +103,8 @@ button:active{
 
 <script>
 
+let isRolling = false;
+    
 const questions = {
     "自己紹介": [
         "自分の口癖は？",
@@ -148,6 +150,14 @@ const generateButton = document.getElementById("generateButton");
 
 generateButton.addEventListener("click", () => {
 
+if (isRolling) return;
+
+isRolling = true;
+
+generateButton.disabled = true;
+rerollButton.disabled = true;
+
+    
     const selectedGenre = genreSelect.value;
 
     let genre;
